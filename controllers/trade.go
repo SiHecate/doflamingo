@@ -40,3 +40,7 @@ func AddBalance(c *fiber.Ctx) error {
 		"new_balance": user.Balance,
 	})
 }
+
+func BuyProduct(c *fiber.Ctx) error {
+
+}

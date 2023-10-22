@@ -4,8 +4,8 @@ import (
 	"doflamingo/database"
 	"doflamingo/router"
 	"log"
+	"os"
 
-	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
@@ -13,16 +13,22 @@ import (
 func main() {
 	database.Connect()
 	app := fiber.New()
+
+	logFile, err := os.Create("api.log")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer logFile.Close()
+	log.SetOutput(logFile)
+	logFile.Sync()
+
 	app.Use(logger.New(logger.Config{
 		Format: "[${ip}]:${port} ${status} - ${method} ${path}\n",
 	}))
+
 	router.Router(app)
 
-	app.Use(jwtware.New(jwtware.Config{
-		SigningKey: jwtware.SigningKey{Key: []byte("secret")},
-	}))
-
-	err := app.Listen(":8080")
+	app.Listen(":8080")
 
 	if err != nil {
 		log.Fatal(err)
