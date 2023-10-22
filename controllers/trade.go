@@ -32,6 +32,8 @@ func AddBalance(c *fiber.Ctx) error {
 		return err
 	}
 
+	CurrencyTransaction(issuer, "Deposit", avaliableBalance, BalanceRequest.Amount)
+
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"username":    user.Username,
 		"old_balance": avaliableBalance,

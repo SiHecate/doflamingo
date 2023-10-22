@@ -31,6 +31,7 @@ func Migrate() {
 	Conn.AutoMigrate(
 		&model.Product{},
 		&model.User{},
+		&model.CurrencyTransaction{},
 	)
 
 	fmt.Println("Migrate successful!")
