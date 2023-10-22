@@ -1,0 +1,38 @@
+version: "3.8"
+
+networks:
+  my_network:
+    driver: bridge
+
+services:
+  postgres:
+    networks:
+      - my_network
+    image: postgres:latest
+    container_name: doflamingo_database
+    environment:
+      POSTGRES_DB: doflamingo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 393406
+    ports:
+      - "5436:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  doflamingo:
+    networks:
+      - my_network
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: doflamingo
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+
+
+volumes:
+  db:
